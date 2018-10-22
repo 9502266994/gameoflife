@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -16,10 +18,14 @@ public class GameOfLifeController {
 
     private static Logger logger = Logger.getLogger(GameOfLifeController.class);
 
-    @RequestMapping(value = "/world", method = POST)
+    private Engine engine = new Engine();
+
     @ResponseBody
-    public List<List<Boolean>> getWorld(@RequestBody List<List<Boolean>> currentWorld) {
-        logger.info(currentWorld);
-        return currentWorld;
+    @RequestMapping(value = "/world", method = POST)
+    public List<ArrayList<Boolean>> getWorld(@RequestBody List<ArrayList<Boolean>> currentCells) {
+        logger.info(currentCells);
+
+        World nextWorld = engine.getNextWorld(new World(currentCells));
+        return nextWorld.getCells();
     }
 }
